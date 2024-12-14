@@ -9,10 +9,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { ProjectCard } from "@/components/custom/ProjectCard";
 
 import { newProject } from "./actions";
+import { getProjects } from "@/lib/models/projects";
 
-export default function Projects(){
+export default async function Projects(){
+    const projects = await getProjects();
+
     return (
         <div className="flex flex-col w-full gap-3 p-4">
             <h1 className="text-4xl">Projects</h1>
@@ -33,6 +37,11 @@ export default function Projects(){
                     </form>
                 </DialogContent>
             </Dialog>
+            <div className="flex flex-row flex-wrap w-full gap-2">
+                {
+                    projects.map((project, id) => <ProjectCard name={project.name} id={project.id} key={id}/>)
+                }
+            </div>
         </div>
     )
 }

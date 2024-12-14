@@ -2,7 +2,7 @@ import db from "../db/db";
 import { projects } from "../db/schema";
 import { InferInsertModel } from "drizzle-orm";
 
-export async function newProject(project: InferInsertModel<typeof projects>){
+export async function addProject(project: InferInsertModel<typeof projects>){
     return (await db.insert(projects).values(project).returning()).at(0);
 }
 

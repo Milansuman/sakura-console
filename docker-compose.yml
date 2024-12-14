@@ -1,0 +1,19 @@
+name: sakura-console
+
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file: .env.local
+  db:
+    image: postgres
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    env_file: .env.local
+
+volumes:
+  db-data:

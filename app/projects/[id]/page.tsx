@@ -7,9 +7,10 @@ import Link from "next/link";
 import { useState, useEffect, useRef, use } from "react";
 import { getProject } from "./actions";
 
+import { Editor } from "@monaco-editor/react";
+
 export default function Page({params}: {params: Promise<{id: number}>}){
     const id = use(params).id;
-    const editorRef = useRef<HTMLDivElement | null>(null);
     const [project, setProject] = useState({
         name: "",
         prompt: "",
@@ -24,7 +25,7 @@ export default function Page({params}: {params: Promise<{id: number}>}){
     }, [])
 
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full max-h-screen">
             <div className="flex flex-row p-4 border-b border-neutral-300 gap-3 items-center">
                 <Link href="/projects">
                     <ArrowLeft />
@@ -49,8 +50,8 @@ export default function Page({params}: {params: Promise<{id: number}>}){
                     <div className="p-3 border-r border-neutral-300 min-w-48">
                         <p className="text-neutral-700">No files yet</p>
                     </div>
-                    <div className="h-full w-full">
-
+                    <div className="flex flex-col w-full h-full">
+                        <Editor language="typescript" theme="vs"/>
                     </div>
                 </div>
             </div>

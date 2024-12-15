@@ -10,6 +10,10 @@ export async function getProjects(){
     return await db.select().from(projects);
 }
 
+export async function getProject(id: number){
+    return (await db.select().from(projects).where(eq(projects.id, id))).at(0);
+}
+
 export async function deleteProject(id: number){
     await db.delete(projects).where(eq(projects.id, id));
 }

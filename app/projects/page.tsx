@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ProjectCard } from "@/components/custom/ProjectCard";
 
 import { newProject, getProjects, deleteProject } from "./actions";
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
 
 export default function Projects(){
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -25,8 +25,17 @@ export default function Projects(){
         })();
     }, []);
 
+    const submitProject = async (event: FormEvent) => {
+        event.preventDefault();
+        setDialogOpen(false)
+        
+        const formData = new FormData(event.target as HTMLFormElement);
+
+        await newProject(formData);
+        await syncProjects();
+    }
+
     const syncProjects = async () => {
-        setDialogOpen(false);
         const dbProjects = await getProjects();
         setProjects(dbProjects);
     }
@@ -41,10 +50,10 @@ export default function Projects(){
                     <DialogHeader>
                         <DialogTitle>New Project</DialogTitle>
                     </DialogHeader>
-                    <form action={newProject} className="flex flex-col gap-2" onSubmit={syncProjects}>
+                    <form className="flex flex-col gap-2" onSubmit={submitProject}>
                         <label htmlFor="name">Project Name</label>
                         <Input name="name" id="name" placeholder="Project name.." required/>
-                        <label htmlFor="prompt">Description</label>
+                        <label htmlFor="prompt">Prompt</label>
                         <Textarea name="prompt" placeholder="What should I build?" id="prompt" rows={5} required/>
                         <Button type="submit" className="w-fit">Start building!</Button>
                     </form>
@@ -57,7 +66,7 @@ export default function Projects(){
                         id={project.id} 
                         name={project.name} 
                         key={project.id}
-                        onDelete={(id) => {deleteProject(id); syncProjects()}}
+                        onDelete={(id) => {deleteProject(id); syncProjects();}}
                         />
                     )
                 }
